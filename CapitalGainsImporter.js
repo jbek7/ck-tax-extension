@@ -6,6 +6,7 @@ CKI.enabledImporters = {
 	"Fidelity Consolidated 1099 CSV": CKI.Importers.fidelity,
 	"Bitcoin.tax": CKI.Importers.bitcoinTax,
 	"Cointracking.info CSV": CKI.Importers.coinTrackingInfo,
+	"Schwab": CKI.Importers.schwab,
 };
 
 CKI.init = function(evt) {
@@ -144,7 +145,14 @@ CKI.inputRowData = function(dataSource, row) {
 			(data.belongsTo) ? bt.value = data.belongsTo : bt.value = "tp";
 
 			var rc = element.querySelector('[name="capitalGains['+formIndex+'].reportingCategory"]');
-			rc.value = data.reportingCategory;
+            var rcVal = 0;
+            if( data.reportingCategory == "Short Term Covered") rcVal= 1;
+            else if(data.reportingCategory=="Long Term Covered") rcVal=4;
+			if(rcVal!=0){
+			    rc.value = rcVal;
+			} else {
+			    rc.value = data.reportingCategory;
+			}
 
 			var ac= element.querySelector('[name="capitalGains['+formIndex+'].adjustmentCode"]');
 			ac.value = data.adjustmentCode;
